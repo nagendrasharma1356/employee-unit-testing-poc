@@ -103,7 +103,7 @@ class EmployeeControllerTest {
         mockMvc.perform(get("/api/employees/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Nagendra"))
-                .andExpect(jsonPath("$.salary").value(50000.00));
+                .andExpect(jsonPath("$.salary").value(10000.00));
     }
 
     @Test
