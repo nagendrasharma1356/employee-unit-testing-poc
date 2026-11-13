@@ -1,5 +1,7 @@
 package com.hexawarre.employee.controller;
 
+import com.hexawarre.employee.dto.EmployeeRequest;
+import com.hexawarre.employee.dto.EmployeeResponse;
 import com.hexawarre.employee.model.Employee;
 import com.hexawarre.employee.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -29,8 +31,10 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.createEmployee(employee));
+    public ResponseEntity<EmployeeResponse> createEmployee(
+            @Valid @RequestBody EmployeeRequest request) {
+        EmployeeResponse response = employeeService.createEmployee(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")

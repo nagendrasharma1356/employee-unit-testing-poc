@@ -1,5 +1,7 @@
 package com.hexawarre.employee.service;
 
+import com.hexawarre.employee.dto.EmployeeRequest;
+import com.hexawarre.employee.dto.EmployeeResponse;
 import com.hexawarre.employee.exception.DuplicateEmailException;
 import com.hexawarre.employee.exception.ResourceNotFoundException;
 import com.hexawarre.employee.model.Employee;
@@ -21,11 +23,28 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public Employee createEmployee(Employee employee) {
-        if (employeeRepository.existsByEmail(employee.getEmail())) {
-            throw new DuplicateEmailException("Employee already exists with email: " + employee.getEmail());
+    public EmployeeResponse createEmployee(EmployeeRequest request) {
+        if (employeeRepository.existsByEmail(request.getEmail())) {
+            throw new DuplicateEmailException(
+                    "Employee already exists with email: " + request.getEmail()
+            );
         }
-        return employeeRepository.save(employee);
+
+        Employee employee = new Employee();
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+        employee.setEmail(request.getEmail());
+        employee.setDepartment(request.getDepartment());
+
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        EmployeeResponse response = new EmployeeResponse();
+        response.setId(savedEmployee.getId());
+        response.setFirstName(savedEmployee.getFirstName());
+        response.setLastName(savedEmployee.getLastName());
+        response.setEmail(savedEmployee.getEmail());
+        response.setDepartment(savedEmployee.getDepartment());
+        return response;
     }
 
     public Employee getEmployeeById(Long id) {
@@ -53,7 +72,6 @@ public class EmployeeService {
         existing.setLastName(details.getLastName());
         existing.setEmail(details.getEmail());
         existing.setDepartment(details.getDepartment());
-        existing.setSalary(details.getSalary());
         return employeeRepository.save(existing);
     }
 
@@ -72,7 +90,6 @@ public class EmployeeService {
 
         Employee employee = getEmployeeById(id);
         BigDecimal factor = BigDecimal.ONE.add(BigDecimal.valueOf(percent).divide(BigDecimal.valueOf(100)));
-        employee.setSalary(employee.getSalary().multiply(factor).setScale(2, RoundingMode.HALF_UP));
         return employeeRepository.save(employee);
     }
 }

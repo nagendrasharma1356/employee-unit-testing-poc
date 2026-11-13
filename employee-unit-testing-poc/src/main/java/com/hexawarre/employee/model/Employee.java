@@ -35,9 +35,6 @@ public class Employee {
     @NotBlank(message = "Department is required")
     private String department;
 
-    @NotNull(message = "Salary is required")
-    @Positive(message = "Salary must be greater than zero")
-    private BigDecimal salary;
 
     public Employee() {
     }
@@ -49,7 +46,6 @@ public class Employee {
         this.lastName = lastName;
         this.email = email;
         this.department = department;
-        this.salary = salary;
     }
 
     public Long getId() {
@@ -92,11 +88,4 @@ public class Employee {
         this.department = department;
     }
 
-    public BigDecimal getSalary() {
-        return salary;
-    }
-
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
-    }
 }
